@@ -13,14 +13,14 @@ app.get("/", async (req, res) => {
   res.send({ message: `Bievenue sur l'API de Chat Now, il y a actuellement ${messages.length} messages` })
 })
 
-io.on('connection', async (socket: Socket) => {
+io.on('connection', (socket: Socket) => {
   console.log('a user connected');
 
-  const messages = await prisma.message.findMany({});
+  const messages = prisma.message.findMany({});
 
   socket.data.messages = JSON.stringify(messages);
 
-  socket.on('message', async (data: string) => {
+  socket.on('message', (data: string) => {
     const dataParsed: {
       img: string;
       pseudo: string;
@@ -33,7 +33,7 @@ io.on('connection', async (socket: Socket) => {
     io.emit('message', data);
 
     // Add message to the database
-    await prisma.message.create({
+    prisma.message.create({
       data: {
         img: dataParsed.img,
         pseudo: dataParsed.pseudo,
