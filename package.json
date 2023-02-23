@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "tsc",
+    "delete": "pm2 delete chatnow-node",
     "deploy": "npm run build && pm2 start dist/index.js --name=\"chatnow-node\"",
     "start": "ts-node-dev src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
