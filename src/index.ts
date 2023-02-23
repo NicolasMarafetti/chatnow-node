@@ -2,25 +2,32 @@ import express from 'express';
 import http from 'http';
 import { Server, Socket } from 'socket.io';
 import prisma from './lib/prisma';
+import cors from 'cors';
 
 const app = express();
 const server = http.createServer(app);
-const io = new Server(server);
-
+const io = new Server(server, {
+  cors: {
+    origin: "http://localhost:3000",
+    methods: ["GET", "POST"]
+  }
+});
+app.use(cors())
 app.get("/", async (req, res) => {
   const messages = await prisma.message.findMany({});
 
   res.send({ message: `Bievenue sur l'API de Chat Now, il y a actuellement ${messages.length} messages` })
 })
 
-io.on('connection', (socket: Socket) => {
+io.on('connection',async (socket: Socket) => {
   console.log('a user connected');
+  
+  const messages = await prisma.message.findMany({});
+  
+  socket.emit('init-data',messages)
 
-  const messages = prisma.message.findMany({});
-
-  socket.data.messages = JSON.stringify(messages);
-
-  socket.on('message', (data: string) => {
+  socket.on('message',async (data: string) => {
+    console.log(data)
     const dataParsed: {
       img: string;
       pseudo: string;
@@ -29,17 +36,18 @@ io.on('connection', (socket: Socket) => {
 
     console.log(`received message: ${dataParsed.message}`);
 
-    // Emit messages to the sockets
-    io.emit('message', data);
+    
 
     // Add message to the database
-    prisma.message.create({
+    await prisma.message.create({
       data: {
         img: dataParsed.img,
         pseudo: dataParsed.pseudo,
         message: dataParsed.message
       }
     })
+    // Emit messages to the sockets
+    io.emit('message', dataParsed);
   });
 
   socket.on('disconnect', () => {
