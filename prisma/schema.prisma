@@ -12,6 +12,8 @@ datasource db {
 
 model Message {
   id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  img       String
+  pseudo      String
   message     String
   dateCreated DateTime @default(now())
 }
