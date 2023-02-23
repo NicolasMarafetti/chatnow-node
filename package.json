@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "deploy": "tsc && pm2 start dist/index.js --name='chatnow-node'",
+    "deploy": "tsc && pm2 start dist/index.js --name=\"chatnow-node\"",
     "start": "ts-node-dev src/index.ts",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
