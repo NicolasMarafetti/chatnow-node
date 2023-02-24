@@ -19,4 +19,9 @@ jobs:
       - run: |
           git pull
           npm run build
-          pm2 restart chatnow-node
+
+      - name: Install pm2
+        run: npm install pm2 -g
+
+      - name: Start pm2
+        run: pm2 restart chatnow-node
