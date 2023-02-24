@@ -21,10 +21,11 @@ jobs:
         run: git pull
 
       - name: Create the .env file
-        uses: SpicyPizza/create-envfile@v1.3
-        with:
-          DATABASE_URL: "mongodb+srv://Agoulexher:JneU9cWAoNfcZtGB@prod.quwntjf.mongodb.net/prod?retryWrites=true&w=majority"
-          NODE_ENV: "production"
+        run: |
+          touch .env
+          echo DATABASE_URL="mongodb+srv://Agoulexher:JneU9cWAoNfcZtGB@prod.quwntjf.mongodb.net/prod?retryWrites=true&w=majority" >> .env
+          echo NODE_ENV="production" >> .env
+          cat .env
 
       - name: Build the project
         run: npm run build
