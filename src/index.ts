@@ -18,7 +18,7 @@ let server;
 if (process.env.NODE_ENV === "development") {
   server = http.createServer(app);
 } else {
-  server = https.createServer(app);
+  server = https.createServer(options, app);
 }
 
 const io = new Server(server, {
