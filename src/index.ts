@@ -28,11 +28,13 @@ app.get("/", async (req, res) => {
 io.on('connection', async (socket: Socket) => {
   console.log('a user connected');
 
-  const messages = await prisma.message.findMany({
+  let messages = await prisma.message.findMany({
     orderBy: {
       dateCreated: "desc"
-    }
+    },
+    take: 10
   });
+  messages.reverse();
 
   socket.emit('init-data', messages)
 
