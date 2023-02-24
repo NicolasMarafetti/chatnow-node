@@ -16,7 +16,7 @@ app.use(cors())
 app.get("/", async (req, res) => {
   const messages = await prisma.message.findMany({});
 
-  res.send({ message: `Bievenue sur l'API de Chat Now, il y a actuellement ${messages.length} messages - reworked ab` })
+  res.send({ message: `Bievenue sur l'API de Chat Now, il y a actuellement ${messages.length} messages - reworked abc` })
 })
 
 io.on('connection', async (socket: Socket) => {
