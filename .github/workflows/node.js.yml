@@ -17,4 +17,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - run: |
-          npm run redeploy
+          git pull
+          npm run build
+          pm2 restart chatnow-node
