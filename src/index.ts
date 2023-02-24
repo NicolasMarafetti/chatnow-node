@@ -14,10 +14,12 @@ const options = {
   cert: fs.readFileSync('/etc/letsencrypt/live/chattyroom.ovh/fullchain.pem')
 };
 
+let listenPort: number = 3001;
 let server;
 if (process.env.NODE_ENV === "development") {
   server = http.createServer(app);
 } else {
+  listenPort = 443;
   server = https.createServer(options, app);
 }
 
@@ -69,7 +71,7 @@ io.on('connection', async (socket: Socket) => {
   });
 });
 
-server.listen(3001, () => {
-  console.log('listening on *:3001');
+server.listen(listenPort, () => {
+  console.log(`listening on *:${listenPort}`);
   console.log(`protocol used is ${process.env.NODE_ENV === "development" ? "http" : "https"}`)
 });
