@@ -8,6 +8,8 @@ on:
 
 jobs:
   build:
+    env: 
+      PATH: "/root/.nvm/versions/node/v14.17.6/bin/"
     runs-on: self-hosted
 
     steps:
@@ -24,7 +26,7 @@ jobs:
         run: npm run build
 
       - name: Add pm2 to PATH
-        run: echo "::add-path::/root/.nvm/versions/node/v14.17.6/bin/"
+        run: echo "::add-path::${{PATH}}"
 
       - name: Restart pm2
         run: pm2 restart chatnow-node
