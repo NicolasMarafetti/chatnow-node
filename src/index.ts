@@ -1,11 +1,26 @@
 import express from 'express';
 import http from 'http';
+import https from 'https';
 import { Server, Socket } from 'socket.io';
 import prisma from './lib/prisma';
 import cors from 'cors';
 
+const fs = require('fs');
+
 const app = express();
-const server = http.createServer(app);
+
+const options = {
+  key: fs.readFileSync('/etc/letsencrypt/live/chattyroom.ovh/privkey.pem'),
+  cert: fs.readFileSync('/etc/letsencrypt/live/chattyroom.ovh/fullchain.pem')
+};
+
+let server;
+if (process.env.NODE_ENV === "development") {
+  server = http.createServer(app);
+} else {
+  server = https.createServer(app);
+}
+
 const io = new Server(server, {
   cors: {
     origin: "*",
@@ -56,4 +71,5 @@ io.on('connection', async (socket: Socket) => {
 
 server.listen(3001, () => {
   console.log('listening on *:3001');
+  console.log(`protocol used is ${process.env.NODE_ENV === "development" ? "http" : "https"}`)
 });
