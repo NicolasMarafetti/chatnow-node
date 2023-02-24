@@ -23,9 +23,6 @@ jobs:
       - name: Build the project
         run: npm run build
 
-      - name: install pm2 global
-        run: npm install pm2@latest -g
-
       - name: Check pm2 version
         run: pm2 -V
 
