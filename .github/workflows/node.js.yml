@@ -9,6 +9,8 @@ on:
 jobs:
   build:
     runs-on: self-hosted
+    env:
+      OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
     steps:
       - uses: actions/checkout@v3
@@ -26,10 +28,6 @@ jobs:
           echo DATABASE_URL="mongodb+srv://Agoulexher:JneU9cWAoNfcZtGB@prod.quwntjf.mongodb.net/prod?retryWrites=true&w=majority" >> .env
           echo NODE_ENV="production" >> .env
           cat .env
-
-      - name: Create env variables
-        env:
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Install the modules
         run: npm i
