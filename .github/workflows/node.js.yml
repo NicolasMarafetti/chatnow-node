@@ -25,8 +25,11 @@ jobs:
           touch .env
           echo DATABASE_URL="mongodb+srv://Agoulexher:JneU9cWAoNfcZtGB@prod.quwntjf.mongodb.net/prod?retryWrites=true&w=majority" >> .env
           echo NODE_ENV="production" >> .env
-          echo OPENAI_API_KEY="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" >> .env
           cat .env
+
+      - name: Create env variables
+        env:
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
 
       - name: Install the modules
         run: npm i
