@@ -28,6 +28,9 @@ jobs:
           echo OPENAI_API_KEY="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" >> .env
           cat .env
 
+      - name: Install the modules
+        run: npm i
+
       - name: Build the project
         run: npm run build
 
