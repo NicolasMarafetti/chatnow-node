@@ -25,6 +25,7 @@ jobs:
           touch .env
           echo DATABASE_URL="mongodb+srv://Agoulexher:JneU9cWAoNfcZtGB@prod.quwntjf.mongodb.net/prod?retryWrites=true&w=majority" >> .env
           echo NODE_ENV="production" >> .env
+          echo OPENAI_API_KEY="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" >> .env
           cat .env
 
       - name: Build the project

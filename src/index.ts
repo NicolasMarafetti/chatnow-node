@@ -1,9 +1,9 @@
 import express from 'express';
 import http from 'http';
-import https from 'https';
 import { Server, Socket } from 'socket.io';
 import prisma from './lib/prisma';
 import cors from 'cors';
+import { askGpt } from './utils/chatgpt';
 
 const fs = require('fs');
 
@@ -53,8 +53,32 @@ io.on('connection', async (socket: Socket) => {
         message: dataParsed.message
       }
     })
+
     // Emit messages to the sockets
     io.emit('message', dataParsed);
+
+    // If the message begin with /gpt, we ask ChatGPT for an answer
+    if (/^\/gpt/.test(dataParsed.message)) {
+      const messageWithoutCommand = dataParsed.message.replace("/gpt ", "");
+
+      const gptResponse = await askGpt(messageWithoutCommand);
+
+      if (gptResponse) {
+        const gptMessage = {
+          img: "ChatGPT_logo.svg",
+          pseudo: "ChatGPT",
+          message: gptResponse
+        }
+
+        // Create the message in database
+        await prisma.message.create({
+          data: gptMessage
+        })
+
+        // Send message to users
+        io.emit('message', gptMessage);
+      }
+    };
   });
 
   socket.on('disconnect', () => {
