@@ -6,12 +6,17 @@ const configuration = new Configuration({
 const openai = new OpenAIApi(configuration);
 
 export async function askGpt(text: string) {
-  const completion = await openai.createCompletion({
-    model: "text-davinci-003",
-    prompt: text,
-    temperature: 0.6,
-    max_tokens: 1000
-  });
+  try {
+    const completion = await openai.createCompletion({
+      model: "text-davinci-003",
+      prompt: text,
+      temperature: 0.6,
+      max_tokens: 1000
+    });
 
-  return completion.data.choices[0].text;
+    return completion.data.choices[0].text;
+  } catch (error: any) {
+    console.error("error.response", error.response);
+    return undefined;
+  }
 }
