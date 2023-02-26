@@ -5,12 +5,22 @@ import prisma from './lib/prisma';
 import cors from 'cors';
 import { askGpt } from './utils/chatgpt';
 
-const fs = require('fs');
+import https from 'https';
+import fs from "fs";
 
 const app = express();
 
 let listenPort: number = 3001;
-let server = http.createServer(app);
+let server;
+let protocol = process.env.NODE_ENV === "development" ? "http" : "https";
+if (process.env.NODE_ENV === "development") {
+  server = http.createServer(app);
+} else {
+  server = https.createServer({
+    key: fs.readFileSync('/etc/letsencrypt/live/chattyroom.ovh/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/chattyroom.ovh/fullchain.pem')
+  }, app);
+}
 
 const io = new Server(server, {
   cors: {
@@ -117,5 +127,5 @@ io.on('connection', async (socket: Socket) => {
 
 server.listen(listenPort, () => {
   console.log(`listening on *:${listenPort}`);
-  console.log(`protocol used is http`)
+  console.log(`protocol used is ${protocol}`)
 });
