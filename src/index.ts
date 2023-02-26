@@ -25,6 +25,35 @@ app.get("/", async (req, res) => {
   res.send({ message: `Bievenue sur l'API de Chat Now, il y a actuellement ${messages.length} messages - reworked abcdefghijklmnopqrstuvwx` })
 })
 
+// Test GPT
+app.get("/gpt", async (req, res) => {
+  const message = await askGpt("crée moi un template nextjs13 avec tailwind pour un espace membre");
+
+  res.send({ message: `<pre>${message}</pre>` })
+})
+
+// Get Messages
+app.get("/messages", async (req, res) => {
+  const take = parseInt(req.query.take as string, 10);
+  const skip = parseInt(req.query.skip as string, 10);
+
+  const messages = await prisma.message.findMany({
+    orderBy: {
+      dateCreated: "desc"
+    },
+    take,
+    skip
+  })
+  messages.reverse();
+
+  const messageQuantity = await prisma.message.count();
+
+  return res.status(200).json({
+    messageQuantity,
+    messages
+  })
+})
+
 io.on('connection', async (socket: Socket) => {
   console.log('a user connected');
 
