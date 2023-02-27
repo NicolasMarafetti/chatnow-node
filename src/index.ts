@@ -29,21 +29,21 @@ const io = new Server(server, {
   }
 });
 app.use(cors())
-app.get("/api/", async (req, res) => {
+app.get("/", async (req, res) => {
   const messages = await prisma.message.findMany({});
 
   res.send({ message: `Bievenue sur l'API de Chat Now, il y a actuellement ${messages.length} messages.` })
 })
 
 // Test GPT
-app.get("/api/gpt", async (req, res) => {
+app.get("/gpt", async (req, res) => {
   const message = await askGpt("crée moi un template nextjs13 avec tailwind pour un espace membre");
 
   res.send({ message: `<pre>${message}</pre>` })
 })
 
 // Get Messages
-app.get("/api/messages", async (req, res) => {
+app.get("/messages", async (req, res) => {
   const take = parseInt(req.query.take as string, 10);
   const skip = parseInt(req.query.skip as string, 10);
 
