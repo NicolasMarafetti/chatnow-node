@@ -104,7 +104,7 @@ io.on('connection', async (socket: Socket) => {
 
       if (gptResponse) {
         const gptMessage = {
-          img: "ChatGPT_logo.svg",
+          img: "ChatGPT_logo.webp",
           pseudo: "ChatGPT",
           message: gptResponse
         }
