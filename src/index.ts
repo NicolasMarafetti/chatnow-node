@@ -6,9 +6,13 @@ import cors from 'cors';
 import { askGpt } from './utils/chatgpt';
 
 import https from 'https';
+import path from "path";
 import fs from "fs";
 
 const app = express();
+
+// Allow dotfiles - this is required for verification by Lets Encrypt's certbot
+app.use(express.static(path.join(__dirname, 'build'), { dotfiles: 'allow' }));
 
 let listenPort: number = 3001;
 let server;
@@ -17,8 +21,8 @@ if (process.env.NODE_ENV === "development") {
   server = http.createServer(app);
 } else {
   server = https.createServer({
-    key: fs.readFileSync('/etc/letsencrypt/live/chattyroom.ovh/privkey.pem'),
-    cert: fs.readFileSync('/etc/letsencrypt/live/chattyroom.ovh/fullchain.pem')
+    key: fs.readFileSync('src/ssl/privkey.pem'),
+    cert: fs.readFileSync('src/ssl/fullchain.pem')
   }, app);
 }
 
