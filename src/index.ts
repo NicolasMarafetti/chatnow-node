@@ -10,7 +10,7 @@ import fs from "fs";
 
 const app = express();
 
-let listenPort: number = process.env.NODE_ENV === "development" ? 3001 : 443;
+let listenPort: number = 3001;
 let server;
 let protocol = process.env.NODE_ENV === "development" ? "http" : "https";
 if (process.env.NODE_ENV === "development") {
