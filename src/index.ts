@@ -21,8 +21,8 @@ if (process.env.NODE_ENV === "development") {
   server = http.createServer(app);
 } else {
   server = https.createServer({
-    key: fs.readFileSync('src/ssl/privkey.pem'),
-    cert: fs.readFileSync('src/ssl/fullchain.pem')
+    key: fs.readFileSync('/etc/letsencrypt/live/chattyroom.ovh/privkey.pem'),
+    cert: fs.readFileSync('/etc/letsencrypt/live/chattyroom.ovh/fullchain.pem')
   }, app);
 }
 
