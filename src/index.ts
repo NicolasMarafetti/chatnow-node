@@ -44,16 +44,27 @@ app.get("/api/gpt", async (req, res) => {
 
 // Get Messages
 app.get("/api/messages", async (req, res) => {
-  const take = parseInt(req.query.take as string, 10);
-  const skip = parseInt(req.query.skip as string, 10);
+  let messages;
 
-  const messages = await prisma.message.findMany({
-    orderBy: {
-      dateCreated: "desc"
-    },
-    take,
-    skip
-  })
+  if (typeof req.query.take !== "undefined" && typeof req.query.skip !== "undefined") {
+    const take = parseInt(req.query.take as string, 10);
+    const skip = parseInt(req.query.skip as string, 10);
+
+    messages = await prisma.message.findMany({
+      orderBy: {
+        dateCreated: "desc"
+      },
+      take,
+      skip
+    })
+  } else {
+    messages = await prisma.message.findMany({
+      orderBy: {
+        dateCreated: "desc"
+      },
+    })
+  }
+
   messages.reverse();
 
   const messageQuantity = await prisma.message.count();
