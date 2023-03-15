@@ -86,7 +86,7 @@ io.on('connection', async (socket: Socket) => {
     orderBy: {
       dateCreated: "desc"
     },
-    take: 10
+    take: 20
   });
   messages.reverse();
 
